@@ -1,0 +1,11 @@
+.aws-sam/
+
+# Python artifacts
+__pycache__/
+*.pyc
+
+# OS junk
+.DS_Store
+
+# Keep region/account ID private.
+samconfig.toml

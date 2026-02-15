@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  rmbh-sam-config
+
+  Sample SAM Template for rmbh.me
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'https://rmbh.me'"
+
+Resources:
+  # DynamoDB table to store visitor counts
+  VisitorsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: path_id
+        Type: String
+
+  # Lambda Function
+  CountVisitorsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambdas/
+      Handler: count_visitors.lambda_handler
+      Runtime: python3.9
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref VisitorsTable
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          DATABASE_NAME: !Ref VisitorsTable
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /getcount
+            Method: get
+
+Outputs:
+  GetCountApiUrl:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/getcount"
