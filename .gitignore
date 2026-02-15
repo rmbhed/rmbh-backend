@@ -6,6 +6,3 @@ __pycache__/
 
 # OS junk
 .DS_Store
-
-# Keep region/account ID private.
-samconfig.toml

@@ -23,7 +23,7 @@ def get_path(event):
     # 3. Clean up and Fallback
     # If it's empty or just a slash, call it 'home'
     if not page_path or page_path == "/":
-        page_path = "/index"
+        page_path = "/index.html"
         
     print(f"Final resolved path: {page_path}")
     return page_path
