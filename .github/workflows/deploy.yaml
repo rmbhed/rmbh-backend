@@ -2,7 +2,11 @@ name: SAM Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   build-deploy:
@@ -13,7 +17,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Setup SAM
         uses: aws-actions/setup-sam@v2
@@ -21,8 +25,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::768102455419:role/GitHubAction-SAM-Deploy
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: SAM Build
